@@ -1,10 +1,10 @@
 import json
 import xml.etree.ElementTree as xml
 import pandas as pd
-PATH_rooms ="D:\\LeverX_Python_course\\task1\\src\\rooms.json"
-PATH_students ="D:\\LeverX_Python_course\\task1\\src\\students.json"
-XML = True
-JSON = True
+PATH_rooms ="D:\\LeverX_Python_course\\task1\\src\\rooms.json" # путь к файлу rooms.json
+PATH_students ="D:\\LeverX_Python_course\\task1\\src\\students.json" # путь к файлу students.json
+XML = True # выводить ли итог в XML?
+JSON = True # выводить ли итог в XML?
 class filework:
     def jsonfile_to_dict(path:str)->dict:
         """
@@ -23,11 +23,25 @@ class filework:
             exit()
 
         return value
-    def dict_to_json(dictionary):
-        with open('result.json', 'w') as fp:
-            json.dump(dictionary, fp)
+    def dict_to_json(name:str,dictionary:dict)->None:
+        '''
+        :param  name: name of file
+        :param  dict: dictionary of values
+        :return: None
 
-    def xml_result(filename):
+        Данная функция загружает словарь в файл json
+        '''
+        with open(name, 'w') as fp:
+            json.dump(dictionary, fp)
+        return None
+
+    def xml_result(filename:str)->None:
+        '''
+        :param filename: name of xml result file
+        :return: None
+
+         Данная функция загружает словарь в файл xml
+        '''
         root = xml.Element('MyStudents')
         for item in itog_dict:
             appt = xml.Element("Room" + str(item)[6:])
@@ -40,12 +54,27 @@ class filework:
                 tree.write(fh)
 
 
+
 class datawork:
-    def DataFrame(dct:dict):
+    def DataFrame(dct:dict)->pd.DataFrame:
+        '''
+        :param dct: dictionary of values
+        :return: dataset
+
+        Данная функция организует датасет из словаря
+        '''
         df = pd.DataFrame(dct)
         return df
 
-    def RemadeSets(obj,students,rooms):
+    def RemadeSets(self,students:dict,rooms:dict)->pd.DataFrame:
+        '''
+
+        :param students: dictionary (students.json)
+        :param rooms: dictionary (rooms.json)
+        :return: dataset
+
+        Данная функция совершает преобразование students и rooms в удобный для работы датасет res
+        '''
         infostud = obj2.DataFrame(students)
         infostud.rename(columns={'room': 'id_room'}, inplace=True)
         inforooms = obj2.DataFrame(rooms)
@@ -64,11 +93,13 @@ students = obj.jsonfile_to_dict(PATH_students)
 obj2 =datawork
 res = obj2.RemadeSets(obj2,students,rooms)
 list_rooms = res.room.drop_duplicates().values.tolist()
+# далее преобразование данных в нормальный словарь для работы с файлами
 itog_dict ={}
 for rms in list_rooms:
     itog_dict[rms] = res[res.room == rms]['students'].drop_duplicates().values.tolist()
+
 if JSON :
-    obj.dict_to_json(itog_dict)
+    obj.dict_to_json('result.json',itog_dict)
 if XML:
     obj.xml_result('result.xml')
 
