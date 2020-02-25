@@ -1,1 +1,2 @@
-password ='ТУТ ВВЕДИТЕ СВОЙ ПАРОЛЬ'
+
+password ='OWN PASSWORD'

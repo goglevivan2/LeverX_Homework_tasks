@@ -1,8 +1,8 @@
 SQL1='''
-SELECT r.name,s.name 
+SELECT r.name,count(s.name) 
     from students s, rooms r
     where s.room = r.id
-    order by r.name
+    group by r.name
 '''
 
 SQL2='''
