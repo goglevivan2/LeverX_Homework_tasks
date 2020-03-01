@@ -1,2 +1,2 @@
 
-password ='OWN PASSWORD'
+password ='OWN PASS'
